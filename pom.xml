@@ -7,6 +7,11 @@
     <groupId>com.example</groupId>
     <artifactId>Inno_Task_Tracker</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>api</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
