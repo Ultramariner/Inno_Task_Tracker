@@ -1,0 +1,23 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: #2d6cdf;
+  color: white;
+
+  .user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    button {
+      background: white;
+      color: #2d6cdf;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  }
+}
