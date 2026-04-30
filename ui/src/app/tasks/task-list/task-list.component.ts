@@ -4,11 +4,12 @@ import { TaskService } from '../task.service';
 import { Task } from '../task.model';
 import { TaskItemComponent } from '../task-item/task-item.component';
 import { TaskEditorComponent } from '../task-editor/task-editor.component';
+import { DragDropModule, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, TaskItemComponent, TaskEditorComponent],
+  imports: [CommonModule, TaskItemComponent, TaskEditorComponent, DragDropModule],
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss'],
 })
@@ -34,6 +35,14 @@ export class TaskListComponent implements OnInit {
       },
       error: () => (this.loading = false),
     });
+  }
+
+  drop(event: CdkDragDrop<Task[]>) {
+    moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
+
+    this.tasks = this.tasks.map((t, i) => ({ ...t, order: i }));
+
+    this.taskService.reorderTasks(this.tasks).subscribe();
   }
 
   openCreate() {

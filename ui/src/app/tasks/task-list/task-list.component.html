@@ -5,8 +5,12 @@
 
 <div *ngIf="loading">Загрузка...</div>
 
-<ul *ngIf="!loading">
-  <li *ngFor="let task of tasks">
+<ul
+  *ngIf="!loading"
+  cdkDropList
+  (cdkDropListDropped)="drop($event)"
+>
+  <li *ngFor="let task of tasks" cdkDrag>
     <app-task-item
       [task]="task"
       (toggle)="toggleTask($event)"

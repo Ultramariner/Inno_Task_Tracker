@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@angular/cdk": "^21.2.9",
     "keycloak-js": "^26.2.4"
   }
 }
