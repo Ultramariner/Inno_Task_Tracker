@@ -1,1 +1,7 @@
-<p>task-list works!</p>
+<div *ngIf="loading">Загрузка...</div>
+
+<ul *ngIf="!loading">
+  <li *ngFor="let task of tasks">
+    {{ task.title }} — <strong>{{ task.completed ? '✔' : '✗' }}</strong>
+  </li>
+</ul>
