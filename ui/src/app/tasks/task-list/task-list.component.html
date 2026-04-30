@@ -1,7 +1,25 @@
+<div class="header">
+  <h2>Задачи</h2>
+  <button (click)="openCreate()">+ Добавить задачу</button>
+</div>
+
 <div *ngIf="loading">Загрузка...</div>
 
 <ul *ngIf="!loading">
   <li *ngFor="let task of tasks">
-    {{ task.title }} — <strong>{{ task.completed ? '✔' : '✗' }}</strong>
+    <app-task-item
+      [task]="task"
+      (toggle)="toggleTask($event)"
+      (edit)="openEdit($event)"
+      (remove)="removeTask($event)"
+    ></app-task-item>
   </li>
 </ul>
+
+<div *ngIf="editorVisible" class="editor-modal">
+  <app-task-editor
+    [task]="editingTask"
+    (save)="saveTask($event)"
+    (cancel)="closeEditor()"
+  ></app-task-editor>
+</div>
