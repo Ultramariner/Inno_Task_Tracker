@@ -1,16 +1,16 @@
-<div class="editor">
-  <label>
-    Название:
-    <input [(ngModel)]="title" />
-  </label>
+<h3>{{ task ? 'Редактировать задачу' : 'Новая задача' }}</h3>
 
-  <label>
-    Описание:
-    <textarea [(ngModel)]="description"></textarea>
-  </label>
+<label>
+  Название:
+  <input [(ngModel)]="title" />
+</label>
 
-  <div class="buttons">
-    <button (click)="onSave()">Сохранить</button>
-    <button (click)="cancel.emit()">Отмена</button>
-  </div>
+<label>
+  Описание:
+  <textarea [(ngModel)]="description"></textarea>
+</label>
+
+<div class="buttons">
+  <button class="primary" (click)="onSave()">Сохранить</button>
+  <button class="secondary" (click)="cancel.emit()">Отмена</button>
 </div>

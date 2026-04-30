@@ -20,10 +20,12 @@
   </li>
 </ul>
 
-<div *ngIf="editorVisible" class="editor-modal">
-  <app-task-editor
-    [task]="editingTask"
-    (save)="saveTask($event)"
-    (cancel)="closeEditor()"
-  ></app-task-editor>
+<div *ngIf="editorVisible" class="modal-backdrop">
+  <div class="modal-window">
+    <app-task-editor
+      [task]="editingTask"
+      (save)="saveTask($event)"
+      (cancel)="closeEditor()"
+    ></app-task-editor>
+  </div>
 </div>

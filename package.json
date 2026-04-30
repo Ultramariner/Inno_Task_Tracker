@@ -2,5 +2,8 @@
   "dependencies": {
     "@angular/cdk": "^21.2.9",
     "keycloak-js": "^26.2.4"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^6.0.0"
   }
 }
