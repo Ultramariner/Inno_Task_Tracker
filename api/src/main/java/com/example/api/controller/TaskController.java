@@ -8,6 +8,8 @@ import com.example.api.mapper.TaskMapper;
 import com.example.api.service.TaskService;
 import com.example.api.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,14 +23,15 @@ public class TaskController {
     private final UserService userService;
     private final TaskMapper taskMapper;
 
-    // todo keycloak
     private User getUser(Long userId) {
         return userService.getById(userId);
     }
 
     @GetMapping
-    public List<TaskResponseDto> getTasks(@RequestParam Long userId) {
-        User user = getUser(userId);
+    public List<TaskResponseDto> getTasks(@AuthenticationPrincipal Jwt jwt) {
+
+        User user = resolveUser(jwt);
+
         return taskService.getTasksForUser(user)
                 .stream()
                 .map(taskMapper::toDto)
@@ -36,26 +39,32 @@ public class TaskController {
     }
 
     @PostMapping
-    public TaskResponseDto createTask(@RequestParam Long userId,
+    public TaskResponseDto createTask(@AuthenticationPrincipal Jwt jwt,
                                       @RequestBody TaskRequestDto dto) {
-        User user = getUser(userId);
+        User user = resolveUser(jwt);
         Task task = taskService.createTask(dto, user);
         return taskMapper.toDto(task);
     }
 
     @PutMapping("/{taskId}")
-    public TaskResponseDto updateTask(@RequestParam Long userId,
+    public TaskResponseDto updateTask(@AuthenticationPrincipal Jwt jwt,
                                       @PathVariable Long taskId,
                                       @RequestBody TaskRequestDto dto) {
-        User user = getUser(userId);
+        User user = resolveUser(jwt);
         Task task = taskService.updateTask(taskId, dto, user);
         return taskMapper.toDto(task);
     }
 
     @DeleteMapping("/{taskId}")
-    public void deleteTask(@RequestParam Long userId,
+    public void deleteTask(@AuthenticationPrincipal Jwt jwt,
                            @PathVariable Long taskId) {
-        User user = getUser(userId);
+        User user = resolveUser(jwt);
         taskService.deleteTask(taskId, user);
+    }
+
+    private User resolveUser(Jwt jwt) {
+        String externalId = jwt.getSubject();
+        String username = jwt.getClaim("preferred_username");
+        return userService.getOrCreateByExternalId(externalId, username);
     }
 }

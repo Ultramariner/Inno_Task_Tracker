@@ -19,6 +19,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getByExternalId(String externalId) {
+        return userRepository.findByExternalId(externalId)
+                .orElseThrow(() -> new RuntimeException("User not found by externalId: " + externalId));
+    }
+
+    public User getOrCreateByExternalId(String externalId, String username) {
+        return userRepository.findByExternalId(externalId)
+                .orElseGet(() -> {
+                    User user = User.builder()
+                            .externalId(externalId)
+                            .username(username)
+                            .build();
+                    return userRepository.save(user);
+                });
+    }
+
+    @Override
     public User getByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found: " + username));

@@ -16,9 +16,11 @@ public class UserController {
 
     private final UserService userService;
 
+    //todo remove after keycloak check
     @PostMapping
-    public UserDto createUser(@RequestParam String username) {
-        User user = userService.createUser(username, null);
+    public UserDto createUser(@RequestParam String username,
+                              @RequestParam String externalId) {
+        User user = userService.createUser(username, externalId);
         return new UserDto(user.getId(), user.getUsername());
     }
 }

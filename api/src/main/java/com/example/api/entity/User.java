@@ -22,7 +22,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-    // todo keycloak
     @Column(name = "external_id")
     private String externalId;
 
