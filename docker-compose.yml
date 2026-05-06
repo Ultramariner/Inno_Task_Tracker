@@ -25,6 +25,8 @@ services:
       KC_DB_USERNAME: admin
       KC_DB_PASSWORD: admin
 
+      KC_HOSTNAME: localhost
+
     volumes:
       - ./keycloak:/opt/keycloak/data/import
     ports:
@@ -42,12 +44,16 @@ services:
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin
 
-      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/task-tracker-realm
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://localhost:8080/realms/task-tracker-realm
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/realms/task-tracker-realm/protocol/openid-connect/certs
+
     ports:
       - "8081:8081"
     depends_on:
       - postgres
       - keycloak
+    extra_hosts:
+      - "localhost:host-gateway"
 
   ui:
     build:

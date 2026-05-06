@@ -13,6 +13,7 @@ export function initializeKeycloak() {
     keycloak.init({
       onLoad: 'login-required',
       checkLoginIframe: false,
+      pkceMethod: 'S256'
     });
 }
 
