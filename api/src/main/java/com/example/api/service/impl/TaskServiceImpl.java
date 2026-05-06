@@ -2,11 +2,14 @@ package com.example.api.service.impl;
 
 import com.example.api.dto.TaskRequestDto;
 import com.example.api.entity.Task;
+import com.example.api.entity.TaskStatus;
 import com.example.api.entity.User;
 import com.example.api.mapper.TaskMapper;
 import com.example.api.repository.TaskRepository;
 import com.example.api.service.TaskService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,11 +40,15 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task createTask(TaskRequestDto dto, User user) {
+
+        Integer lastPosition = taskRepository.findMaxPositionByUser(user.getId());
+        int newPosition = lastPosition == null ? 0 : lastPosition + 1;
+
         Task task = Task.builder()
                 .title(dto.title())
                 .description(dto.description())
-                .status(dto.status())
-                .position(dto.position())
+                .status(TaskStatus.TODO)
+                .position(newPosition)
                 .user(user)
                 .build();
 

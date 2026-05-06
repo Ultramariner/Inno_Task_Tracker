@@ -4,10 +4,10 @@ services:
     container_name: task-tracker-postgres
     restart: always
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./postgres-init:/docker-entrypoint-initdb.d
@@ -17,13 +17,13 @@ services:
     container_name: task-tracker-keycloak
     command: start-dev --import-realm
     environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
+      KEYCLOAK_ADMIN: postgres
+      KEYCLOAK_ADMIN_PASSWORD: postgres
 
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
-      KC_DB_USERNAME: admin
-      KC_DB_PASSWORD: admin
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
 
       KC_HOSTNAME: localhost
 
@@ -41,14 +41,17 @@ services:
     container_name: task-tracker-api
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/task_tracker
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
 
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://localhost:8080/realms/task-tracker-realm
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/realms/task-tracker-realm/protocol/openid-connect/certs
 
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+
     ports:
       - "8081:8081"
+      - "5005:5005"
     depends_on:
       - postgres
       - keycloak

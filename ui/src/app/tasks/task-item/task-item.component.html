@@ -1,11 +1,12 @@
 <div class="task-item">
-  <input
-    type="checkbox"
-    [checked]="task.completed"
-    (change)="onToggle()"
-  />
 
-  <span [class.completed]="task.completed">
+  <select [value]="task.status" (change)="onStatusChange($event)">
+    <option *ngFor="let s of statuses" [value]="s">
+      {{ s }}
+    </option>
+  </select>
+
+  <span [class.completed]="task.status === 'DONE'">
     {{ task.title }}
   </span>
 
@@ -13,4 +14,5 @@
     <button (click)="onEdit()">✏️</button>
     <button (click)="onRemove()">🗑️</button>
   </div>
+
 </div>

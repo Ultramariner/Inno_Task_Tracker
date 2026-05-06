@@ -39,9 +39,7 @@ export class TaskListComponent implements OnInit {
 
   drop(event: CdkDragDrop<Task[]>) {
     moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
-
-    this.tasks = this.tasks.map((t, i) => ({ ...t, order: i }));
-
+    this.tasks = this.tasks.map((t, i) => ({ ...t, position: i }));
     this.taskService.reorderTasks(this.tasks).subscribe();
   }
 
@@ -73,9 +71,8 @@ export class TaskListComponent implements OnInit {
     }
   }
 
-  toggleTask(task: Task) {
-    this.taskService
-      .updateTask(task.id, { completed: !task.completed })
+  updateStatus(task: Task) {
+    this.taskService.updateTask(task.id, { status: task.status })
       .subscribe(() => this.loadTasks());
   }
 

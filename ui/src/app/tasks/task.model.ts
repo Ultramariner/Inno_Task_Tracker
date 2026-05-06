@@ -1,7 +1,9 @@
+import { TaskStatus } from './task-status';
+
 export interface Task {
   id: number;
   title: string;
   description?: string;
-  completed: boolean;
-  order: number;
+  status: TaskStatus;
+  position: number;
 }
