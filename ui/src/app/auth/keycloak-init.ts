@@ -9,12 +9,13 @@ export function initializeKeycloak() {
     clientId: 'task-tracker-ui',
   });
 
-  return () =>
-    keycloak.init({
+  return async () => {
+    await keycloak.init({
       onLoad: 'login-required',
       checkLoginIframe: false,
       pkceMethod: 'S256'
     });
+  };
 }
 
 export function getKeycloak() {

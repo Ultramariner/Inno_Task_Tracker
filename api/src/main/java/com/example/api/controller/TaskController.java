@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -53,6 +54,15 @@ public class TaskController {
         User user = resolveUser(jwt);
         Task task = taskService.updateTask(taskId, dto, user);
         return taskMapper.toDto(task);
+    }
+
+    @PutMapping("/reorder")
+    public void reorderTasks(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestBody Map<Long, TaskRequestDto> tasks
+    ) {
+        User user = resolveUser(jwt);
+        taskService.reorderTasks(tasks, user);
     }
 
     @DeleteMapping("/{taskId}")

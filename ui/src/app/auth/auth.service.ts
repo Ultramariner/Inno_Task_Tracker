@@ -19,7 +19,16 @@ export class AuthService {
     this.kc.logout();
   }
 
+  async isAuthenticatedAsync(): Promise<boolean> {
+    await this.kc.updateToken(5).catch(() => this.kc.login());
+    return !!this.kc.token;
+  }
+
   isAuthenticated(): boolean {
-    return !!this.kc?.token;
+    return !!this.kc.token;
+  }
+
+  getKeycloak() {
+    return this.kc;
   }
 }

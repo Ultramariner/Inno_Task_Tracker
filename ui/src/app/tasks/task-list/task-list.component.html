@@ -6,7 +6,7 @@
 <div *ngIf="loading">Загрузка...</div>
 
 <ul cdkDropList (cdkDropListDropped)="drop($event)">
-  <li *ngFor="let task of tasks" cdkDrag>
+  <li *ngFor="let task of tasks; trackBy: trackById" cdkDrag>
     <app-task-item
       [task]="task"
       (statusChange)="updateStatus($event)"

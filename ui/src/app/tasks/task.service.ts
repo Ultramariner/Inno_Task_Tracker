@@ -29,6 +29,17 @@ export class TaskService {
   }
 
   reorderTasks(tasks: Task[]): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/reorder`, tasks);
+    const payload: Record<number, Partial<Task>> = {};
+
+    for (const t of tasks) {
+      payload[t.id] = {
+        position: t.position,
+        title: t.title,
+        description: t.description,
+        status: t.status
+      };
+    }
+
+    return this.http.put<void>(`${this.apiUrl}/reorder`, payload);
   }
 }

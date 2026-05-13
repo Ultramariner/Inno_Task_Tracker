@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Task } from '../task.model';
@@ -10,7 +10,7 @@ import { Task } from '../task.model';
   templateUrl: './task-editor.component.html',
   styleUrls: ['./task-editor.component.scss'],
 })
-export class TaskEditorComponent {
+export class TaskEditorComponent implements OnChanges {
   @Input() task: Task | null = null;
   @Output() save = new EventEmitter<Partial<Task>>();
   @Output() cancel = new EventEmitter<void>();
@@ -18,15 +18,21 @@ export class TaskEditorComponent {
   title = '';
   description = '';
 
-  ngOnInit() {
-    if (this.task) {
-      this.title = this.task.title;
-      this.description = this.task.description ?? '';
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['task']) {
+      if (this.task) {
+        this.title = this.task.title;
+        this.description = this.task.description ?? '';
+      } else {
+        this.title = '';
+        this.description = '';
+      }
     }
   }
 
   onSave() {
     this.save.emit({
+      ...this.task,
       title: this.title,
       description: this.description,
     });

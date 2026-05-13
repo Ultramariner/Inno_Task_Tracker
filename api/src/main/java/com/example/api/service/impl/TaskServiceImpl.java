@@ -13,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -61,6 +62,21 @@ public class TaskServiceImpl implements TaskService {
         taskMapper.updateTask(task, dto);
         return taskRepository.save(task);
     }
+
+    @Override
+    public void reorderTasks(Map<Long, TaskRequestDto> tasks, User user) {
+        for (Map.Entry<Long, TaskRequestDto> entry : tasks.entrySet()) {
+            Long taskId = entry.getKey();
+            TaskRequestDto dto = entry.getValue();
+
+            Task task = taskRepository.findById(taskId)
+                    .orElseThrow(() -> new RuntimeException("Task not found"));
+
+            task.setPosition(dto.position());
+            taskRepository.save(task);
+        }
+    }
+
 
     //todo mark deleted
     @Override

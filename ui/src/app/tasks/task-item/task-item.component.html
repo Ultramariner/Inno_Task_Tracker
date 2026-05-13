@@ -1,7 +1,7 @@
 <div class="task-item">
 
-  <select [value]="task.status" (change)="onStatusChange($event)">
-    <option *ngFor="let s of statuses" [value]="s">
+  <select (change)="onStatusChange($event)">
+    <option *ngFor="let s of statuses" [value]="s" [selected]="s === task.status">
       {{ s }}
     </option>
   </select>

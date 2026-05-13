@@ -5,6 +5,7 @@ import { Task } from '../task.model';
 import { TaskItemComponent } from '../task-item/task-item.component';
 import { TaskEditorComponent } from '../task-editor/task-editor.component';
 import { DragDropModule, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-task-list',
@@ -20,7 +21,10 @@ export class TaskListComponent implements OnInit {
   editorVisible = false;
   editingTask: Task | null = null;
 
-  constructor(private taskService: TaskService) {}
+  constructor(
+    private taskService: TaskService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     this.loadTasks();
@@ -30,10 +34,15 @@ export class TaskListComponent implements OnInit {
     this.loading = true;
     this.taskService.getTasks().subscribe({
       next: (tasks) => {
-        this.tasks = tasks;
+        console.log('TASKS RECEIVED', tasks);
+        this.tasks = [...tasks];
         this.loading = false;
+        this.cdr.detectChanges();
       },
-      error: () => (this.loading = false),
+      error: () => {
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
     });
   }
 
@@ -72,11 +81,15 @@ export class TaskListComponent implements OnInit {
   }
 
   updateStatus(task: Task) {
-    this.taskService.updateTask(task.id, { status: task.status })
+    this.taskService.updateTask(task.id, task)
       .subscribe(() => this.loadTasks());
   }
 
   removeTask(task: Task) {
     this.taskService.deleteTask(task.id).subscribe(() => this.loadTasks());
+  }
+
+  trackById(index: number, task: Task) {
+    return task.id;
   }
 }
