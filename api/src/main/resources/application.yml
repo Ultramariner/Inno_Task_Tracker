@@ -25,3 +25,12 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8080/realms/task-tracker-realm
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  metrics:
+    tags:
+      application: api
